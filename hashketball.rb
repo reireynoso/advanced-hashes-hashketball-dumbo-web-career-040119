@@ -281,8 +281,9 @@ def most_points_scored
           info.each do |players,stats|
             stats.each do |name,num|
               if name == :points
-                if most_points < num 
+                if most_points < num
                   most_points = num
+                  player = players
                 end
               end
             end
@@ -290,9 +291,102 @@ def most_points_scored
         end
       end
     end
-    #puts player
+    puts "Player with highest points: #{player} #{most_points} points."
   end
   
   most_points_scored
 
+def winning_team
+  team_1 = 0
+  team_2 = 0
+  team_A = ""
+  team_B = ""
+  game_hash.each do |location,team_data|
+    team_data.each do |category,info|
+      if info == "Brooklyn Nets"
+        team_A = info
+        team_data.each do |category,info|
+          if category == :players
+            info.each do |player,stats|
+              stats.each do |name,num|
+                if name == :points 
+                  team_1 += num
+                end
+              end
+            end
+          end
+        end
+      end
+      if info == "Charlotte Hornets"
+        team_B = info
+        team_data.each do |category,info|
+          if category == :players
+            info.each do |player,stats|
+              stats.each do |name,num|
+                if name == :points 
+                  team_2 += num
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  if team_1 > team_2
+    puts "#{team_A} with #{team_1} points"
+  else
+    puts "#{team_B} with #{team_2} points"
+  end
+end
 
+winning_team
+
+def player_with_longest_name
+  name_length = 0
+  player_name = ""
+  game_hash.each do |location,team_data|
+    team_data.each do |category,info|
+      if category == :players
+        info.each do |player,stats|
+          player_short = player.delete(" ")
+          if player_short.length > name_length 
+            name_length = player_short.length
+            player_name = player
+          end
+        end
+      end
+    end
+  end
+  #puts "Longest name is: #{player_name}, #{name_length} characters."
+  return player_name
+end
+
+player_with_longest_name
+
+def long_name_steals_a_ton?
+  #player_with_longest_name
+  steals = 0
+  player_name = ""
+  game_hash.each do |location,team_data|
+    team_data.each do |category,info|
+      if category == :players
+        info.each do |players,stats|
+          stats.each do |name, num|
+            if name == :steals
+              if steals < num
+                steals = num
+                player_name = players
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  if player_name = player_with_longest_name
+    puts true 
+  end
+end
+
+long_name_steals_a_ton?
