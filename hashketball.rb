@@ -254,6 +254,8 @@ def big_shoe_rebounds
       if category == :players
         info.each do |players,stats|
           stats.each do |name,num|
+            if (biggest_shoe_size < stats[":shoe"])
+              biggest_shoe_size = stats[":shoe"]
             if name == :shoe 
               if biggest_shoe_size < num
                 biggest_shoe_size = num
