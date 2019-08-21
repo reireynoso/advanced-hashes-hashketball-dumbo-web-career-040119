@@ -145,92 +145,52 @@ def good_practices
   end
 end
 
-def num_points_scored(player_name)
-  basketball = game_hash
-  basketball.each do |teams,team_data|
-    team_data.each do |category, info|
-      if category == :players
-         info.each do |key,value|
-           if key == player_name
-             value.each do |stats,num|
-               if stats == :points
-                 return num
-               end
-             end
-           end
-         end
-      end
+def num_points_scored(player_name)  
+  game_hash.each do |location, team_data|
+    if team_data[:players][player_name] != nil
+      return team_data[:players][player_name][:points]
     end
   end
 end
 
 def shoe_size(player_name)
-  basketball = game_hash
-  basketball.each do |teams,team_data|
-    team_data.each do |category,info|
-      if category == :players
-        info.each do |key,value|
-          if key == player_name
-            value.each do |stats,num|
-              if stats == :shoe
-                return num
-              end
-            end
-          end
-        end
-      end
+  game_hash.each do |location, team_data|
+    if team_data[:players][player_name] != nil
+      return team_data[:players][player_name][:shoe]
     end
   end
 end
 
 def team_colors(team)
-  basketball = game_hash
-  basketball.each do |teams,team_data|
-    team_data.each do |category,info|
-      if info == team
-        team_data.each do |category,info|
-          if category == :colors
-            return info
-          end
-        end
-      end
+  game_hash.each do |location, team_data|
+    if team_data[:team_name] == team 
+      return team_data[:colors]
     end
   end
 end
 
 def team_names
-  arr = []
-  game_hash.each do |location,team_data|
-     team_data.each do |category,data|
-       if category == :team_name
-         arr << data
-       end
-     end
+  game_hash.map do |location, team_data|
+     team_data[:team_name]
   end
-  return arr
 end
 
 def player_numbers(team_name)
   arr = []
-  game_hash.each do |location,team_data|
-    team_data.each do |category,info|
-      if info == team_name
-        team_data.each do |category,info|
-          if category == :players
-            info.each do |players,stats|
-              stats.each do |stat,num|
-                if stat == :number
-                  arr << num
-                end
-              end
-            end
-          end
-        end
+  # binding.pry
+  game_hash.each do |location, team_data|
+    if team_data[:team_name] == team_name
+      # binding.pry
+      team_data[:players].each do |player, stats|
+        arr << stats[:number] 
       end
     end
   end
   return arr
 end
+
+
+player_numbers("Brooklyn Nets")
 
 def player_stats(player)
   game_hash.each do |location,team_data|
